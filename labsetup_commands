@@ -1,0 +1,13 @@
+dnf install -y httpd createrepo_c
+mkdir -p /var/www/html/lab_repo/BaseOS
+mkdir -p /var/www/html/lab_repo/AppStream
+dnf download --downloadonly --destdir=/var/www/html/lab_repo/BaseOS --repo=baseos tmux
+dnf download --downloadonly --destdir=/var/www/html/lab_repo/AppStream --repo=appstream mariadb-server
+createrepo_c /var/www/html/lab_repo/BaseOS
+createrepo_c /var/www/html/lab_repo/AppStream
+systemctl start firewalld
+systemctl enable firewalld
+firewall-cmd --permanent --add-service=http
+firewall-cmd --reload
+systemctl start httpd
+systemctl enable httpd
